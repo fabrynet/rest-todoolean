@@ -3,6 +3,7 @@
 function addListeners() {
   $('#btn').click(insertTask);
   $('#input').keyup(sendKeyup);
+  $(document).on('click', '.fa-times-circle', deleteTask);
 }
 
 function sendKeyup(event) {
@@ -40,6 +41,18 @@ function insertTask () {
 
 function deleteTask () {
 
+  var id = $(this).data('id');
+
+  $.ajax ({
+    url: `http://157.230.17.132:3001/todos/${id}`,
+    method: 'DELETE',
+    success: function (data) {
+      getTasks();
+    },
+    error: function (err) {
+      console.log('err', err);
+    }
+  });
 }
 
 function getTasks () {

@@ -2,9 +2,39 @@
 
 function addListeners() {
   $('#btn').click(insertTask);
+  $('#input').keyup(sendKeyup);
+}
+
+function sendKeyup(event) {
+
+  var task = $('#input').val();
+
+  var keyWhich = event.which;
+  var keyCode = event.keyCode;
+  if ((keyWhich == 13 || keyCode == 13) && task) {
+    insertTask ();
+  }
 }
 
 function insertTask () {
+
+  var target = $('input');
+  var task = target.val();
+  target.val('');
+
+  $.ajax ({
+    url: 'http://157.230.17.132:3001/todos',
+    method: 'POST',
+    data: {
+      text: task
+    },
+    success: function (data) {
+      getTasks();
+    },
+    error: function (err) {
+      console.log('err', err);
+    }
+  });
 
 }
 
@@ -13,6 +43,8 @@ function deleteTask () {
 }
 
 function getTasks () {
+
+  $('#list').html('');
 
   $.ajax ({
     url: 'http://157.230.17.132:3001/todos',
